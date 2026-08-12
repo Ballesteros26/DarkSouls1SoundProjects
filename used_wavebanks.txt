@@ -1,0 +1,119 @@
+This file contains a list of sound banks that are used in projects
+that are not named the same as that sound bank. These sound banks must be
+(manually) kept in sync. If one project makes changes to a shared sound
+bank, then all projects that share that sound bank must make the exact
+same changes.
+
+However, in some limited cases, it should be possible to not update the 
+shared projects, namely when rebuilding the bank to change a sample 
+that is not referenced in the shared projects. Note that *removing*
+such a sample is not possible, but modifying the wavetable and then 
+rebuilding the bank should work correctly.
+
+For this reason, it's highly recommended to not edit frpg_main unless
+you *really* need to.
+
+In a few cases (marked with an X), the .fev file references a sample
+in the extra sound bank that the .fev file corresponding to that
+sound bank does not. In these cases, cleaning "unused" samples from
+the sound bank's corresponding project will remove this sample which
+is actually used by the X-marked .fev file.
+
+Format:
+
+bank_name
+    .fev referencing bank_name
+        wavetable from bank_name referenced by this .fev
+
+====
+
+fdlc_c4150
+    fdlc_p120110.fev
+        bank/fdlc_c4150/c4150_footx2.wav
+        bank/fdlc_c4150/c4150_footx3.wav
+        bank/fdlc_c4150/c4150_footx1.wav
+frpg_c2230
+    frpg_c2231.fev
+        bank/frpg_c2230/c2230_foot_slice.wav
+frpg_c2810
+    frpg_c2811.fev X
+        bank/frpg_c2811/c2811_blank.wav
+frpg_main
+    frpg_c2230.fev
+        bank/frpg_main/blood1.wav
+        bank/frpg_main/blood3.wav
+    frpg_c2231.fev
+        bank/frpg_main/blood1.wav
+        bank/frpg_main/blood3.wav
+    frpg_c2232.fev
+        bank/frpg_main/blood1.wav
+        bank/frpg_main/blood3.wav
+    frpg_c2370.fev
+        bank/frpg_main/energy.wav
+    frpg_c2380.fev
+        bank/frpg_main/fragment.wav
+    frpg_c2390.fev
+        bank/frpg_main/blood-ghost.wav
+    frpg_c2710.fev
+        bank/frpg_main/asioto-mizu-tiyakusui.wav
+        bank/frpg_main/asioto-mizu-yoin.wav
+    frpg_c2711.fev
+        bank/frpg_main/asioto-mizu-tiyakusui.wav
+        bank/frpg_main/asioto-mizu-yoin.wav
+    frpg_c2811.fev
+        bank/frpg_main/hit/iron-cut-stone.wav
+        bank/frpg_main/hit/iron-cut-stone2.wav
+        bank/frpg_main/fragment.wav
+        bank/frpg_main/blank.wav
+        bank/frpg_main/spark.WAV
+        bank/frpg_main/sparkx.WAV
+        bank/frpg_main/sparkxx.WAV
+        bank/frpg_main/hit/iron-knock-stone.wav
+        bank/frpg_main/hit/iron-knock-stone2.wav
+        bank/frpg_main/hit/iron-stab-stone.wav
+        bank/frpg_main/hit/meat-knock-stone2.wav
+        bank/frpg_main/hit/wood-knock-stone.wav
+        bank/frpg_main/hit/wood-knock-stone2.wav
+        bank/frpg_main/asioto-mizu-yoin.wav
+    frpg_c2830.fev
+        bank/frpg_main/blood1.wav
+        bank/frpg_main/blood3.wav
+    frpg_c2860.fev
+        bank/frpg_main/blood1.wav
+        bank/frpg_main/blood3.wav
+    frpg_c3390.fev
+        bank/frpg_main/fragment.wav
+    frpg_c3420.fev
+        bank/frpg_main/blood1.wav
+        bank/frpg_main/blood3.wav
+    frpg_c3421.fev
+        bank/frpg_main/blood1.wav
+        bank/frpg_main/blood3.wav
+    frpg_c5200.fev
+        bank/frpg_main/blood1.wav
+        bank/frpg_main/blood3.wav
+    frpg_c5210.fev
+        bank/frpg_main/blood1.wav
+        bank/frpg_main/blood3.wav
+    frpg_c5220.fev
+        bank/frpg_main/fragment.wav
+        bank/frpg_main/blood-ghost.wav
+    frpg_c5230.fev
+        bank/frpg_main/fragment.wav
+    frpg_c5260.fev
+        bank/frpg_main/blood1.wav
+        bank/frpg_main/blood3.wav
+    frpg_c5350.fev
+        bank/frpg_main/blood1.wav
+        bank/frpg_main/blood3.wav
+    frpg_c5351.fev
+        bank/frpg_main/blood1.wav
+        bank/frpg_main/blood3.wav
+    frpg_m10.fev
+        bank/frpg_main/blood1.wav
+        bank/frpg_main/blood3.wav
+    frpg_m13.fev
+        bank/frpg_main/fragment.wav
+frpg_p180000
+    frpg_p140000.fev X
+        bank/frpg_p180000/fire2.wav

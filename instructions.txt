@@ -1,0 +1,113 @@
+== Instructions == 
+
+To work with the FMOD Designer Project files, you'll first need to 
+install FMOD Designer. The creators, Firelight, used to host past versions 
+of Designer on their site, but have since taken them down since they have 
+moved to Designer's successor, FMOD Studio. Because of that, combined 
+with needing a version targeting the same version of FMOD, I originally had 
+to use the Wayback Machine to get an older version.
+
+Version 4.28.00 is almost exactly the correct version for DS1's files; 
+I haven't noticed anything different. AinTunez has obtained version 4.28.06's
+installer, since it's the exact version DS1 uses:
+
+https://cdn.discordapp.com/attachments/337365605869027339/494540646292389894/fmoddesigner42806win-installer.exe
+
+However, if you want to get a copy from somewhere else, try the link and
+look for 42800win-installer.exe.
+
+https://web.archive.org/web/*/http://www.fmod.org/download/fmodex/tool/win/*
+
+Note: DS1R uses a later FMOD version. However, this version is backward compatible
+with the PTDE FMOD version, and PTDE cannot read files created in the 
+DS1R FMOD version. For that reason, it's recommended to use PTDE's 
+version (4.28.06) if possible, for cross compatibility.
+
+Once you have FMOD Designer installed, select the FMOD Designer Project 
+(.fdp) file you want to use from those included. These project files are 
+used to generate the FMOD Event (.fev) file and FMOD Sound Bank (.fsb) 
+file corresponding to it. Only the .fev and .fsb files shipped with the 
+final version of DS1, so I had to re-construct the .fdp file from data 
+in the .fev and .fsb.
+
+*Aside*: I've included Python files that attempt to do this, in case you 
+want to look at them, as well as a C++-style format spec for .fev files. 
+(The format for .fsb files is available online.) However, using these 
+Python files is not at all needed, since I've included the output .fdp 
+files generated from DS1's .fev and .fsb files. Note that the Python 
+files probably only work with this version of the .fev files -- the 
+format has changed numerous times -- and even then may not work if I 
+didn't take something that DS1 doesn't use into account.
+
+Open the .fdp in FMOD Designer and go to the Sound Bank tab. It should 
+list the sound banks that the .fdp expects to be present. You need to 
+reconstruct the raw audio files from the .fsb files so that Designer can 
+find them.
+
+For each sound bank needed, find the corresponding .fsb file and use 
+some .fsb extracting software to extract the .mp3 audio files from it. 
+fsb_extr.exe is included in the corresponding folder, which should work
+via drag-and-drop and also through the command line.
+
+Next, convert all the .mp3 files into .wav files. The .fdp expects .wav 
+files, which are then converted to MP3 format when packed into the .fsb. 
+Because of this, you should try to use the "original" .mp3 files whenever 
+possible, since this cycle of .wav -> .mp3 -> .wav -> .mp3 -> ... will 
+result in quality degredation. I use ffmpeg to convert .mp3 files to 
+.wav on Linux, I'm not sure what the best method is on Windows.
+
+(You can also change the project files to read the .mp3 files directly,
+but this is tedious for files that have many sounds.)
+
+If you used FSBext to extract the .wav files, you must pass it the -M
+flag to deal with frpg_xm??.fsb files and then re-interleave the output
+.wav files to make a single multichannel .wav, using something like Audacity.
+fsb_extr.exe should handle this automatically, which is why it is preferred.
+
+Create the directory structure that .fdp file expects and place the .wav 
+files in their correct locations. Each .wav included in the sound bank 
+has a filepath listed (most look like 'bank/...') and it is this filepath 
+that you must match. For example, if you see a filepath like 
+'bank/fdlc_c3471/c3471_foot3.wav', then place c3471_foot3.wav (converted 
+from c3471_foot3.mp3) in the directory "<FDP Directory>\bank\fdl_c3471\".
+
+When you reload the .fdp file, it will show the .wav files it was able to
+find with a white name, and those it could not find with a red name.
+Make sure all sound banks have all their files present before proceeding.
+
+You can now use FMOD Designer to add new sound events and build them
+into the .fev and .fsb files for use in-game. Note that FROM uses a
+particular naming scheme for its events, so you will probably want to 
+find a sound event of the same type you want to make and mimic that.
+FMOD Designer has a very good user manual, with a number of examples.
+FROM uses mostly very primitive events, so copying the structure of an
+existing event shouldn't be too hard.
+
+NOTE: When choosing a .fdp file to edit, take care to not cause 
+      cross-project bank differences. Read used_wavebanks.txt for more
+      information on projects that share wavebanks with other projects.
+      
+When you're done making changes to the .fdp file, build the project.
+This will create new .fev and .fsb files, which can then be placed in 
+DATA\sound\ (provided your files are unpacked with UDSFM).
+
+NOTE: There are four .fev files in DATA\sound\ that are different from 
+      the rest: frpg.fev, fdlc.fev, frpg_stationary.fev, fdlc_stationary.fev.
+      The first two do not appear to be required by the game in any way.
+      The latter two, however, are required, and the game will load 
+      forever if it cannot find them. These files contain no sound 
+      events, but contain copies of every single sound definition in any 
+      .fev across all their respective projects prefixes (frpg_ and 
+      fdlc_). Modifying these sound definitions appears to make no 
+      difference in-game, so what the game needs from these files is 
+      unclear.
+      
+      However, these four .fev files are slightly corrupt: they make 
+      reference to the same sound index in the same bank by different 
+      names.
+      
+      For this reason, I have not included a .fdp file for these .fev
+      files, and they should not need to be rebuilt. It's possible, 
+      however, that the game *is* reading some important information
+      for the _stationary.fev files (say, the list of wavebanks or 
+      something like that).
